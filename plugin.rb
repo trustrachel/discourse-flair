@@ -6,15 +6,12 @@
 
 enabled_site_setting :flair_enabled
 
-DiscoursePluginRegistry.serialized_current_user_fields << "see_flair"
 DiscoursePluginRegistry.serialized_current_user_fields << "flair"
 
 after_initialize do
-
-  User.register_custom_field_type('see_flair', :boolean)
   User.register_custom_field_type('flair', :text)
 
-  register_editable_user_custom_field [:see_flair, :flair]
+  register_editable_user_custom_field [:flair]
 
   if SiteSetting.flair_enabled then
     add_to_serializer(:post, :user_flair, false) {

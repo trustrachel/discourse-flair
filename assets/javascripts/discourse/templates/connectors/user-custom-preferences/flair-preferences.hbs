@@ -1,19 +1,13 @@
 {{#if siteSettings.flair_enabled}}
   <div class="control-group flair">
-    <label class="control-label">Enable flair</label>
-    <div class="controls bio-composer input-xxlarge">
-      <label class='checkbox-label'>
-        {{input type="checkbox" checked=model.custom_fields.see_flair}}
-          See user flair on posts
-      </label>
-    </div>
-  </div>
-  <div class="control-group flair">
     <label class="control-label">Flair</label>
     <div class="controls">
       <label class='text-label'>
         {{input type="text" class="input-xxlarge" value=model.custom_fields.flair}}
       </label>
     </div>
+    <div class="instructions">
+        This will be displayed underneath your username on your posts.
+      </div>
   </div>
 {{/if}}

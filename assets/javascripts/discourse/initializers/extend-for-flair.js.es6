@@ -12,14 +12,9 @@ function attachFlair(api, siteSettings) {
 
     const currentUser = api.getCurrentUser();
     if (currentUser) {
-      const enabled = currentUser.get("custom_fields.see_flair");
-      if (enabled) {
-        return [
-          dec.h("span.user-flair", {
-            attributes: { src: attrs.user_flair }
-          })
-        ];
-      }
+      return [
+        dec.h("span.user-flair", attrs.user_flair)
+      ];
     }
   });
 }
