@@ -1,4 +1,3 @@
 en:
   site_settings:
-    signatures_enabled: "Enable user-made signatures below posts?"
-    signatures_advanced_mode: "Let users use a full blow post editor to create signatures. RESETS all existing signatures. Needs a server restart"
+    flair_enabled: "Enable user flair on posts?"

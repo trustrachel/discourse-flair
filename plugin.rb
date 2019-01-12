@@ -1,30 +1,24 @@
-# name: discourse-signatures
-# about: A plugin to get that nostalgia signatures in Discourse Foruns
-# version: 2.0.0
-# author: Rafael Silva <xfalcox@gmail.com>
-# url: https://github.com/discourse/discourse-signatures
+# name: discourse-flair
+# about: A plugin to add user flair 
+# version: 1.0.0
+# author: trustrachel
+# url: https://github.com/trustrachel/discourse-flair
 
-enabled_site_setting :signatures_enabled
+enabled_site_setting :flair_enabled
 
-DiscoursePluginRegistry.serialized_current_user_fields << "see_signatures"
-DiscoursePluginRegistry.serialized_current_user_fields << "signature_url"
-DiscoursePluginRegistry.serialized_current_user_fields << "signature_raw"
+DiscoursePluginRegistry.serialized_current_user_fields << "see_flair"
+DiscoursePluginRegistry.serialized_current_user_fields << "flair"
 
 after_initialize do
 
-  User.register_custom_field_type('see_signatures', :boolean)
-  User.register_custom_field_type('signature_url', :text)
-  User.register_custom_field_type('signature_raw', :text)
+  User.register_custom_field_type('see_flair', :boolean)
+  User.register_custom_field_type('flair', :text)
 
-  register_editable_user_custom_field [:see_signatures, :signature_url, :signature_raw]
+  register_editable_user_custom_field [:see_flair, :flair]
 
-  if SiteSetting.signatures_enabled then
-    add_to_serializer(:post, :user_signature, false) {
-      if SiteSetting.signatures_advanced_mode then
-        object.user.custom_fields['signature_cooked'] if object.user
-      else
-        object.user.custom_fields['signature_url'] if object.user
-      end
+  if SiteSetting.flair_enabled then
+    add_to_serializer(:post, :user_flair, false) {
+      object.user.custom_fields['flair']
     }
 
     # I guess this should be the default @ discourse. PR maybe?
@@ -36,19 +30,7 @@ after_initialize do
       end
     }
   end
-
-  # This is the code responsible for cooking a new advanced mode sig on user update
-  DiscourseEvent.on(:user_updated) do |user|
-    if SiteSetting.signatures_enabled? && SiteSetting.signatures_advanced_mode && user.custom_fields['signature_raw']
-      cooked_sig = PrettyText.cook(user.custom_fields['signature_raw'], omit_nofollow: user.has_trust_level?(TrustLevel[3]) && !SiteSetting.tl3_links_no_follow)
-      # avoid infinite recursion
-      if cooked_sig != user.custom_fields['signature_cooked']
-        user.custom_fields['signature_cooked'] = cooked_sig
-        user.save
-      end
-    end
-  end
 end
 
-register_asset "javascripts/discourse/templates/connectors/user-custom-preferences/signature-preferences.hbs"
-register_asset "stylesheets/common/signatures.scss"
+register_asset "javascripts/discourse/templates/connectors/user-custom-preferences/flair-preferences.hbs"
+register_asset "stylesheets/common/flair.scss"
